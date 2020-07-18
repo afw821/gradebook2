@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using System.Text;
 
 namespace gradebook2.src.GradeBook
@@ -9,37 +10,38 @@ namespace gradebook2.src.GradeBook
         public Book(string name) //when new keyword used will have to provide a name
         {
             grades = new List<double>();
-            this.name = name;
+            Name = name;
         }
 
-        private List<double> grades; //this is a field
-
-        private string name;
         //instance member of class
         public void AddGrade(double grade) //void = not going to return a value
         {
             grades.Add(grade);
         }
 
-        public void ShowStatstics()
+        public Statictics GetStatstics()
         {
-            double result = 0.0;
-            double highGrade = double.MinValue;
-            double lowGrade = double.MaxValue;
+            Statictics result = new Statictics();
 
-            foreach (double number in grades)
+            result.Average = 0.0;
+            result.High = double.MinValue;
+            result.Low = double.MaxValue;
+
+            foreach (double grade in grades)
             {
-                highGrade = Math.Max(number, highGrade);
-                lowGrade = Math.Min(number, lowGrade);
+                result.High = Math.Max(grade, result.High);
+                result.Low = Math.Min(grade, result.Low);
 
-                result += number;
+                result.Average += grade;
             }
 
-            result /= grades.Count;
+            result.Average /= grades.Count;
 
-            Console.WriteLine($"The average grade is {result:N1}");
-            Console.WriteLine($"The highest grade is {highGrade:N1}");
-            Console.WriteLine($"The lowest grade is {lowGrade:N1}");
+            return result;
         }
+
+        private List<double> grades; //this is a field
+
+        public string Name;
     }
 }
